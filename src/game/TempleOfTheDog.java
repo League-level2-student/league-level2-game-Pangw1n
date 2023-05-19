@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -25,8 +26,12 @@ public class TempleOfTheDog extends JPanel implements KeyListener, ActionListene
 	
 	JFrame window;
 	Timer timer;
+	JLabel dogFoodCount;
+	JLabel coinCount;
 	
 	Dog goodDog;
+	int dogFood;
+	int coins;
 
 	public void run()
 	{
@@ -37,6 +42,13 @@ public class TempleOfTheDog extends JPanel implements KeyListener, ActionListene
 		window.addKeyListener(this);
 		window.setVisible(true);
 		window.pack();
+		
+		coinCount = new JLabel();
+		coinCount.setPreferredSize(new Dimension(200, 50));
+		
+		coinCount.setText("COINS: " + coins);
+		window.add(coinCount);
+		
 		
 		goodDog = new Dog(400, 400, 10, 10, 5, Color.CYAN);
 
@@ -83,6 +95,11 @@ public class TempleOfTheDog extends JPanel implements KeyListener, ActionListene
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
 		{
 			goodDog.right = false;
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_1)
+		{
+			
 		}
 	}
 
