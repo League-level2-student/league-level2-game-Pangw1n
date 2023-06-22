@@ -5,12 +5,12 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 public class TempleOfTheDog {
-	public static final int WIDTH = 500;
-	public static final int HEIGHT = 800;
+	public static final int WIDTH = 600;
+	public static final int HEIGHT = 600;
 	JFrame window;
 	GamePanel panel;
 	public static void main(String[] args) {
-		
+		new TempleOfTheDog().Run();
 	}
 	
 	public TempleOfTheDog()
