@@ -16,10 +16,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     final int END = 2;
     int CurrentState = MENU;
     
+    Player player;
+    
     Timer frameDraw;
     
 	public GamePanel()
 	{
+		player = new Player(300, 300, 25, 25);
+		
     	frameDraw = new Timer(1000/60, this);
     	frameDraw.start();
 	}
@@ -40,19 +44,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		}
 	}
 
-	private void drawEndState(Graphics g) {
+	private void drawMenuState(Graphics g) {
 		// TODO Auto-generated method stub
+		g.setColor(Color.GRAY);
+		g.fillRect(0, 0, TempleOfTheDog.WIDTH, TempleOfTheDog.HEIGHT);
 	}
 
 	private void drawGameState(Graphics g) {
 		// TODO Auto-generated method stub
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, TempleOfTheDog.WIDTH, TempleOfTheDog.HEIGHT);
+		
+		player.draw(g);
 	}
 
-	private void drawMenuState(Graphics g) {
+	private void drawEndState(Graphics g) {
 		// TODO Auto-generated method stub
-		g.setColor(Color.GREEN);
+		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, TempleOfTheDog.WIDTH, TempleOfTheDog.HEIGHT);
 	}
 
@@ -69,7 +77,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		repaint();
 	}
 
-	private void updateEndState() {
+	private void updateMenuState() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -79,7 +87,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
 	}
 
-	private void updateMenuState() {
+	private void updateEndState() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -93,7 +101,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+		    if (CurrentState == END) {
+		        CurrentState = MENU;
+		    } else {
+		        CurrentState++;
+		    }
+		}
 	}
 
 	@Override

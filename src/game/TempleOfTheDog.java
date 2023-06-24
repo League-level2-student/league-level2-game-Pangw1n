@@ -21,7 +21,7 @@ public class TempleOfTheDog {
 	
 	void Run()
 	{
-		window.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		window.setPreferredSize(new Dimension(WIDTH, HEIGHT + 40));
 		window.add(panel);
 		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
