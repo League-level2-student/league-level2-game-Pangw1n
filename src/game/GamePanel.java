@@ -20,6 +20,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     
     Timer frameDraw;
     
+    boolean up;
+    boolean down;
+    boolean left;
+    boolean right;
+    
 	public GamePanel()
 	{
 		player = new Player(300, 300, 25, 25);
@@ -71,6 +76,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		    updateMenuState();
 		}else if(CurrentState == GAME){
 		    updateGameState();
+		    movePlayer();
 		}else if(CurrentState == END){
 		    updateEndState();
 		}
@@ -97,6 +103,26 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	void movePlayer()
+	{
+		if (up)
+		{
+			player.move(0, -5);
+		}
+		if (down)
+		{
+			player.move(0, 5);
+		}
+		if (left)
+		{
+			player.move(-5, 0);
+		}
+		if (right)
+		{
+			player.move(5, 0);
+		}
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -108,11 +134,46 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		        CurrentState++;
 		    }
 		}
+		
+		if (CurrentState == GAME)
+		{
+			if (e.getKeyCode()==KeyEvent.VK_UP)
+			{
+				up = true;
+			}
+			if (e.getKeyCode()==KeyEvent.VK_DOWN)
+			{
+				down = true;
+			}
+			if (e.getKeyCode()==KeyEvent.VK_LEFT)
+			{
+				left = true;
+			}
+			if (e.getKeyCode()==KeyEvent.VK_RIGHT)
+			{
+				right = true;
+			}
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		if (e.getKeyCode()==KeyEvent.VK_UP)
+		{
+			up = false;
+		}
+		if (e.getKeyCode()==KeyEvent.VK_DOWN)
+		{
+			down = false;
+		}
+		if (e.getKeyCode()==KeyEvent.VK_LEFT)
+		{
+			left = false;
+		}
+		if (e.getKeyCode()==KeyEvent.VK_RIGHT)
+		{
+			right = false;
+		}
 	}
 }

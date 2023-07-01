@@ -13,4 +13,10 @@ public class GameObject {
 		this.width = width;
 		this.height = height;
 	}
+	
+	public void move(int x, int y)
+	{
+		this.x += x;
+		this.y += y;
+	}
 }
