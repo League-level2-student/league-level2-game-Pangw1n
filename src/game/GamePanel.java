@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +16,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     final int GAME = 1;
     final int END = 2;
     int CurrentState = MENU;
+
+    Font titleFont;
+    Font subtitleFont;
     
     Player player;
+    GoodDog goodDog;
     
     Timer frameDraw;
     
@@ -25,9 +30,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     boolean left;
     boolean right;
     
+    int gold;
+    int dogFood;
+    
 	public GamePanel()
 	{
-		player = new Player(300, 300, 25, 25);
+    	titleFont = new Font("Arial", Font.PLAIN, 48);
+    	subtitleFont = new Font("Arial", Font.PLAIN, 24);
+    	
+    	player = new Player(300, 400, 25, 25);
+		goodDog = new GoodDog(300, 300, 25, 25);
 		
     	frameDraw = new Timer(1000/60, this);
     	frameDraw.start();
@@ -53,14 +65,26 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		g.setColor(Color.GRAY);
 		g.fillRect(0, 0, TempleOfTheDog.WIDTH, TempleOfTheDog.HEIGHT);
+
+		g.setColor(Color.WHITE);
+		g.setFont(titleFont);
+		g.drawString("Temple Of The Dog", 75, 250);
+		g.setFont(subtitleFont);
+		g.drawString("Press ENTER to start", 175, 550);
 	}
 
 	private void drawGameState(Graphics g) {
 		// TODO Auto-generated method stub
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, TempleOfTheDog.WIDTH, TempleOfTheDog.HEIGHT);
-		
+
+		goodDog.draw(g);
 		player.draw(g);
+		
+		g.setColor(Color.BLACK);
+		g.setFont(subtitleFont);
+		g.drawString("GOLD: " + gold, 10, 25);
+		g.drawString("DOGFOOD: " + dogFood, 10, 50);
 	}
 
 	private void drawEndState(Graphics g) {
