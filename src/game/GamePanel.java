@@ -43,6 +43,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
     	frameDraw = new Timer(1000/60, this);
     	frameDraw.start();
+    	
+    	gold = 100;
+    	dogFood = 100;
 	}
 	
 	@Override
@@ -176,6 +179,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			if (e.getKeyCode()==KeyEvent.VK_RIGHT)
 			{
 				right = true;
+			}
+			if (e.getKeyCode()==KeyEvent.VK_SPACE)
+			{
+				double dist = Math.sqrt(Math.pow(goodDog.x - player.x, 2)   +   Math.pow(goodDog.y - player.y, 2));
+				if (dist < 50)
+				{
+					//OpenMenu();
+				}
 			}
 		}
 	}
