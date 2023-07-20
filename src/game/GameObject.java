@@ -17,7 +17,15 @@ public class GameObject {
 	public void move(int x, int y)
 	{
 		this.x += x;
+		if(this.x < 0 || this.x > TempleOfTheDog.WIDTH)
+		{
+			this.x -= x;
+		}
 		this.y += y;
+		if(this.y < 0 || this.y > TempleOfTheDog.HEIGHT)
+		{
+			this.y -= y;
+		}
 	}
 	
 	public void update()

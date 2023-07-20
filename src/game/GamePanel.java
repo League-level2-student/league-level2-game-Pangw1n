@@ -33,6 +33,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     int gold;
     int dogFood;
     
+	float goldCountdownMax;
+	float goldCountdown;
+    int goldIncome;
+    int dogFoodIncome;
+    
 	public GamePanel()
 	{
     	titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -46,6 +51,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	
     	gold = 100;
     	dogFood = 100;
+    	goldCountdownMax = 5000;
+    	goldIncome = 100;
 	}
 	
 	@Override
@@ -117,7 +124,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 
 	private void updateGameState() {
 		// TODO Auto-generated method stub
-		
+		goldCountdown -= 1000/60;
+		if (goldCountdown <= 0)
+		{
+			gold += goldIncome;
+			goldCountdown = goldCountdownMax;
+		}
 	}
 
 	private void updateEndState() {
