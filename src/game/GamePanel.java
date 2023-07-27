@@ -20,6 +20,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     Font titleFont;
     Font subtitleFont;
     
+    UIManager uiManager;
+    
     Player player;
     GoodDog goodDog;
     
@@ -42,6 +44,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	{
     	titleFont = new Font("Arial", Font.PLAIN, 48);
     	subtitleFont = new Font("Arial", Font.PLAIN, 24);
+    	
+    	uiManager = new UIManager(0);
     	
     	player = new Player(300, 400, 25, 25);
 		goodDog = new GoodDog(300, 300, 25, 25);
@@ -69,6 +73,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		{
 		    drawEndState(g);
 		}
+		uiManager.update(g);
 	}
 
 	private void drawMenuState(Graphics g) {
@@ -93,8 +98,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
 		g.setColor(Color.BLACK);
 		g.setFont(subtitleFont);
-		g.drawString("GOLD: " + gold, 10, 25);
-		g.drawString("DOGFOOD: " + dogFood, 10, 50);
+		g.drawString("GOLD: " + gold, 10, TempleOfTheDog.HEIGHT - 25);
+		g.drawString("DOGFOOD: " + dogFood, 10, TempleOfTheDog.HEIGHT - 50);
 	}
 
 	private void drawEndState(Graphics g) {
