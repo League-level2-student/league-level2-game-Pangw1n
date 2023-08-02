@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     Font titleFont;
     Font subtitleFont;
     
+    ObjectManager objectManager;
     UIManager uiManager;
     
     Player player;
@@ -45,18 +46,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	titleFont = new Font("Arial", Font.PLAIN, 48);
     	subtitleFont = new Font("Arial", Font.PLAIN, 24);
     	
+    	objectManager = new ObjectManager(player);
     	uiManager = new UIManager(0);
     	
-    	player = new Player(300, 400, 25, 25);
-		goodDog = new GoodDog(300, 300, 25, 25);
+    	player = new Player(300,300, 15, 15);
+		goodDog = new GoodDog(300, 150, 25, 25);
 		
     	frameDraw = new Timer(1000/60, this);
     	frameDraw.start();
     	
     	gold = 100;
-    	dogFood = 100;
+    	dogFood = 0;
     	goldCountdownMax = 5000;
-    	goldIncome = 100;
+    	goldIncome = 0;
 	}
 	
 	@Override
@@ -152,19 +154,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	{
 		if (up)
 		{
-			player.move(0, -5);
+			player.move(0, -2);
 		}
 		if (down)
 		{
-			player.move(0, 5);
+			player.move(0, 2);
 		}
 		if (left)
 		{
-			player.move(-5, 0);
+			player.move(-2, 0);
 		}
 		if (right)
 		{
-			player.move(5, 0);
+			player.move(2, 0);
 		}
 	}
 
@@ -177,6 +179,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		    } else {
 		        CurrentState++;
 		    }
+		    
+		    if (CurrentState == GAME)
+		    {
+		    	
+		    }
+		    
+		    uiManager.CurrentState = uiManager.NONE;
 		}
 		
 		if (CurrentState == GAME)
@@ -197,12 +206,63 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			{
 				right = true;
 			}
-			if (e.getKeyCode()==KeyEvent.VK_SPACE)
+			if (e.getKeyCode()==KeyEvent.VK_E)
 			{
 				double dist = Math.sqrt(Math.pow(goodDog.x - player.x, 2)   +   Math.pow(goodDog.y - player.y, 2));
-				if (dist < 50)
+				if (dist < 50 && uiManager.CurrentState != uiManager.UPGRADE)
 				{
-					//OpenMenu();
+					uiManager.CurrentState = uiManager.UPGRADE;
+				}
+				else
+				{
+					uiManager.CurrentState = uiManager.NONE;
+				}
+			}
+			if (e.getKeyCode()==KeyEvent.VK_Q)
+			{
+				if (uiManager.CurrentState != uiManager.BUILD)
+				{
+					uiManager.CurrentState = uiManager.BUILD;
+				}
+				else
+				{
+					uiManager.CurrentState = uiManager.NONE;
+				}
+			}
+			
+			if (uiManager.CurrentState == uiManager.BUILD)
+			{
+				if (e.getKeyCode() == KeyEvent.VK_1)
+				{
+					//build dogfood mine
+				}
+				if (e.getKeyCode() == KeyEvent.VK_2)
+				{
+					//build tower
+				}
+				if (e.getKeyCode() == KeyEvent.VK_3)
+				{
+					//build trap
+				}
+			}
+			
+			if (uiManager.CurrentState == uiManager.UPGRADE)
+			{
+				if (e.getKeyCode() == KeyEvent.VK_1)
+				{
+					//upgrade gold income
+				}
+				if (e.getKeyCode() == KeyEvent.VK_2)
+				{
+					//upgrade gold income speed
+				}
+				if (e.getKeyCode() == KeyEvent.VK_3)
+				{
+					//upgrade health
+				}
+				if (e.getKeyCode() == KeyEvent.VK_4)
+				{
+					//heal
 				}
 			}
 		}

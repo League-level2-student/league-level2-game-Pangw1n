@@ -26,11 +26,11 @@ public class UIManager {
     
     private void drawBuildMenu(Graphics g) {
 		g.setColor(Color.GRAY);
-		g.drawRect(0, 0, TempleOfTheDog.WIDTH, 80);
+		g.fillRect(0, 0, TempleOfTheDog.WIDTH, 80);
 	}
     
     private void drawUpgradeMenu(Graphics g) {
     	g.setColor(Color.GRAY);
-		g.drawRect(TempleOfTheDog.WIDTH - 150, 0, 150, TempleOfTheDog.HEIGHT);
+		g.fillRect(TempleOfTheDog.WIDTH - 150, 0, 150, TempleOfTheDog.HEIGHT);
 	}
 }
