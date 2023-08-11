@@ -28,29 +28,37 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     
     Timer frameDraw;
     
-    boolean up;
-    boolean down;
-    boolean left;
-    boolean right;
-    
     int gold;
     int dogFood;
+    
+    int MineCost = 100;
+    int TowerCost = 200;
+    int TrapCost = 150;
     
 	float goldCountdownMax;
 	float goldCountdown;
     int goldIncome;
     int dogFoodIncome;
     
+    boolean waveStart;
+    int waveNum;
+    int spawnedEnemies;
+    int totalEnemies;
+    int spawnCountdownMax;
+    int spawnCountdown;
+    int waveDowntimeCountdownMax;
+    int waveDowntimeCountdown;
+    
 	public GamePanel()
 	{
     	titleFont = new Font("Arial", Font.PLAIN, 48);
     	subtitleFont = new Font("Arial", Font.PLAIN, 24);
     	
-    	objectManager = new ObjectManager(player);
-    	uiManager = new UIManager(0);
-    	
     	player = new Player(300,300, 15, 15);
 		goodDog = new GoodDog(300, 150, 25, 25);
+    	
+    	objectManager = new ObjectManager(goodDog, player);
+    	uiManager = new UIManager(0);
 		
     	frameDraw = new Timer(1000/60, this);
     	frameDraw.start();
@@ -59,6 +67,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	dogFood = 0;
     	goldCountdownMax = 5000;
     	goldIncome = 0;
+    	
+    	waveStart = false;
+    	waveNum = 0;
+        spawnedEnemies = 0;
+        totalEnemies = 0;
+    	spawnCountdownMax = 1000;
+    	spawnCountdown = 0;
+    	waveDowntimeCountdownMax = 20000;
+    	waveDowntimeCountdown = 0;
 	}
 	
 	@Override
@@ -95,8 +112,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, TempleOfTheDog.WIDTH, TempleOfTheDog.HEIGHT);
 
-		goodDog.draw(g);
-		player.draw(g);
+		objectManager.draw(g);
 		
 		g.setColor(Color.BLACK);
 		g.setFont(subtitleFont);
@@ -117,7 +133,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		    updateMenuState();
 		}else if(CurrentState == GAME){
 		    updateGameState();
-		    movePlayer();
 		}else if(CurrentState == END){
 		    updateEndState();
 		}
@@ -137,6 +152,36 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			gold += goldIncome;
 			goldCountdown = goldCountdownMax;
 		}
+		
+		if (waveStart)
+		{
+			if (spawnedEnemies < totalEnemies)
+			{
+				spawnCountdown -= 1000/60;
+				if (spawnCountdown <= 0)
+				{
+					objectManager.spawnEnemy();
+					spawnCountdown = spawnCountdownMax;
+					spawnedEnemies ++;
+				}
+			}
+			if (objectManager.enemies.size() == 0)
+			{
+				waveStart = false;
+				waveDowntimeCountdown = waveDowntimeCountdownMax;
+			}
+		}
+
+		if (!waveStart)
+		{
+			waveDowntimeCountdown -= 1000/60;
+			if (waveDowntimeCountdown <= 0)
+			{
+				waveStart = true;
+			}
+		}
+		
+		objectManager.update();
 	}
 
 	private void updateEndState() {
@@ -149,26 +194,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	void movePlayer()
-	{
-		if (up)
-		{
-			player.move(0, -2);
-		}
-		if (down)
-		{
-			player.move(0, 2);
-		}
-		if (left)
-		{
-			player.move(-2, 0);
-		}
-		if (right)
-		{
-			player.move(2, 0);
-		}
-	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -180,11 +205,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		        CurrentState++;
 		    }
 		    
-		    if (CurrentState == GAME)
-		    {
-		    	
-		    }
-		    
 		    uiManager.CurrentState = uiManager.NONE;
 		}
 		
@@ -192,19 +212,30 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		{
 			if (e.getKeyCode()==KeyEvent.VK_UP)
 			{
-				up = true;
+				player.up = true;
 			}
 			if (e.getKeyCode()==KeyEvent.VK_DOWN)
 			{
-				down = true;
+				player.down = true;
 			}
 			if (e.getKeyCode()==KeyEvent.VK_LEFT)
 			{
-				left = true;
+				player.left = true;
 			}
 			if (e.getKeyCode()==KeyEvent.VK_RIGHT)
 			{
-				right = true;
+				player.right = true;
+			}
+			if (e.getKeyCode()==KeyEvent.VK_SPACE)
+			{
+				if (!waveStart)
+				{
+					waveStart = true;
+					waveNum ++;
+					spawnedEnemies = 0;
+					totalEnemies = waveNum * 5;
+					spawnCountdown = 0;
+				}
 			}
 			if (e.getKeyCode()==KeyEvent.VK_E)
 			{
@@ -235,14 +266,32 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				if (e.getKeyCode() == KeyEvent.VK_1)
 				{
 					//build dogfood mine
+					if (gold >= MineCost)
+					{
+						objectManager.Build(0, player.x, player.y, 30, 30);
+						uiManager.CurrentState = uiManager.NONE;
+						gold -= MineCost;
+					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_2)
 				{
 					//build tower
+					if (gold >= TowerCost)
+					{
+						objectManager.Build(1, player.x, player.y, 20, 20);
+						uiManager.CurrentState = uiManager.NONE;
+						gold -= TowerCost;
+					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_3)
 				{
 					//build trap
+					if (gold >= TrapCost)
+					{
+						objectManager.Build(2, player.x, player.y, 10, 10);
+						uiManager.CurrentState = uiManager.NONE;
+						gold -= TrapCost;
+					}
 				}
 			}
 			
@@ -273,19 +322,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		if (e.getKeyCode()==KeyEvent.VK_UP)
 		{
-			up = false;
+			player.up = false;
 		}
 		if (e.getKeyCode()==KeyEvent.VK_DOWN)
 		{
-			down = false;
+			player.down = false;
 		}
 		if (e.getKeyCode()==KeyEvent.VK_LEFT)
 		{
-			left = false;
+			player.left = false;
 		}
 		if (e.getKeyCode()==KeyEvent.VK_RIGHT)
 		{
-			right = false;
+			player.right = false;
 		}
 	}
 }

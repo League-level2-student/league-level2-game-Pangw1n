@@ -22,7 +22,16 @@ public class Building extends GameObject{
 		{
 			g.setColor(Color.DARK_GRAY);
 		}
+		else if (typeID == 2)
+		{
+			g.setColor(Color.BLACK);
+		}
 		
         g.fillRect(x - width / 2, y - height / 2, width, height);
+	}
+	
+	public void update()
+	{
+		
 	}
 }
