@@ -5,11 +5,22 @@ import java.awt.Graphics;
 
 public class Building extends GameObject{
 	public int typeID;
+	public int Level;
+	
+	public double Countdown;
+	public double CountdownMax;
 	
 	public Building(int x, int y, int width, int height, int id)
 	{
 		super(x, y, width, height);
 		typeID = id;
+		Level = 1;
+		
+		if (id == 0)
+		{
+			Countdown = 5000;
+			CountdownMax = 5000;
+		}
 	}
 	
 	public void draw(Graphics g)
@@ -32,6 +43,6 @@ public class Building extends GameObject{
 	
 	public void update()
 	{
-		
+		Countdown -= 1000/60;
 	}
 }

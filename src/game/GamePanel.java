@@ -35,10 +35,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     int TowerCost = 200;
     int TrapCost = 150;
     
+    int GoldIncomeCostBase = 100;
+    int GoldIncomeLevel = 0;
+    int HealthCostBase = 20;
+    int HealthLevel = 5;
+    int HealCost = 10;
+    
 	float goldCountdownMax;
 	float goldCountdown;
     int goldIncome;
-    int dogFoodIncome;
     
     boolean waveStart;
     int waveNum;
@@ -55,10 +60,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	subtitleFont = new Font("Arial", Font.PLAIN, 24);
     	
     	player = new Player(300,300, 15, 15);
-		goodDog = new GoodDog(300, 150, 25, 25);
+		goodDog = new GoodDog(300, 150, 25, 25, 5);
     	
-    	objectManager = new ObjectManager(goodDog, player);
+    	objectManager = new ObjectManager(goodDog, player, this);
     	uiManager = new UIManager(0);
+    	
+    	uiManager.MineCost = MineCost;
+    	uiManager.TowerCost = TowerCost;
+    	uiManager.TrapCost = TrapCost;
+    	uiManager.HealCost = HealCost;
+    	
 		
     	frameDraw = new Timer(1000/60, this);
     	frameDraw.start();
@@ -74,8 +85,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
         totalEnemies = 0;
     	spawnCountdownMax = 1000;
     	spawnCountdown = 0;
-    	waveDowntimeCountdownMax = 20000;
-    	waveDowntimeCountdown = 0;
+    	waveDowntimeCountdownMax = 15000;
+		waveDowntimeCountdown = waveDowntimeCountdownMax;
 	}
 	
 	@Override
@@ -146,12 +157,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 
 	private void updateGameState() {
 		// TODO Auto-generated method stub
+    	uiManager.GoldIncomeCost = GoldIncomeCostBase * (GoldIncomeLevel + 1);
+    	uiManager.HealthCost = HealthCostBase * (HealthLevel + 1);
+    	
 		goldCountdown -= 1000/60;
 		if (goldCountdown <= 0)
 		{
 			gold += goldIncome;
 			goldCountdown = goldCountdownMax;
 		}
+		
+		
 		
 		if (waveStart)
 		{
@@ -165,19 +181,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 					spawnedEnemies ++;
 				}
 			}
-			if (objectManager.enemies.size() == 0)
+			else if (objectManager.enemies.size() == 0)
 			{
 				waveStart = false;
 				waveDowntimeCountdown = waveDowntimeCountdownMax;
 			}
 		}
-
-		if (!waveStart)
+		
+		else
 		{
 			waveDowntimeCountdown -= 1000/60;
 			if (waveDowntimeCountdown <= 0)
 			{
 				waveStart = true;
+				waveNum ++;
+				spawnedEnemies = 0;
+				totalEnemies = waveNum * 5;
+				spawnCountdown = 0;
 			}
 		}
 		
@@ -239,8 +259,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			}
 			if (e.getKeyCode()==KeyEvent.VK_E)
 			{
-				double dist = Math.sqrt(Math.pow(goodDog.x - player.x, 2)   +   Math.pow(goodDog.y - player.y, 2));
-				if (dist < 50 && uiManager.CurrentState != uiManager.UPGRADE)
+				//double dist = Math.sqrt(Math.pow(goodDog.x - player.x, 2)   +   Math.pow(goodDog.y - player.y, 2));
+				if (uiManager.CurrentState != uiManager.UPGRADE)
 				{
 					uiManager.CurrentState = uiManager.UPGRADE;
 				}
@@ -300,18 +320,34 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				if (e.getKeyCode() == KeyEvent.VK_1)
 				{
 					//upgrade gold income
+					if (dogFood >= GoldIncomeCostBase * (GoldIncomeLevel + 1))
+					{
+						dogFood -= GoldIncomeCostBase * (GoldIncomeLevel + 1);
+						GoldIncomeLevel ++;
+						
+						goldIncome = 50 * GoldIncomeLevel;
+					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_2)
 				{
-					//upgrade gold income speed
+					//upgrade health
+					if (dogFood >= HealthCostBase * (HealthLevel + 1))
+					{
+						dogFood -= HealthCostBase * (HealthLevel + 1);
+						HealthLevel ++;
+						
+						goodDog.maxHealth = HealthLevel;
+						goodDog.health ++;
+					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_3)
 				{
-					//upgrade health
-				}
-				if (e.getKeyCode() == KeyEvent.VK_4)
-				{
-					//heal
+					if (dogFood >= HealCost && goodDog.health < goodDog.maxHealth)
+					{
+						dogFood -= HealCost;
+						
+						goodDog.health ++;
+					}
 				}
 			}
 		}

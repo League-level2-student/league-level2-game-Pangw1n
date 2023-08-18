@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ObjectManager {
+	GamePanel gamePanel;
 	GoodDog goodDog;
 	Player player;
 	ArrayList<Building> buildings;
@@ -12,12 +13,13 @@ public class ObjectManager {
 	
 	int size;
 	
-	public ObjectManager(GoodDog goodDog, Player player)
+	public ObjectManager(GoodDog goodDog, Player player, GamePanel gamePanel)
 	{
 		this.goodDog = goodDog;
 		this.player = player;
 		buildings = new ArrayList<Building>();
 		enemies = new ArrayList<Enemy>();
+		this.gamePanel = gamePanel;
 	}
 	
 	public void draw(Graphics g)
@@ -38,6 +40,19 @@ public class ObjectManager {
 	public void update()
 	{
 		player.update();
+		
+		for (Building b : buildings)
+		{
+			b.update();
+			if (b.Countdown <= 0)
+			{
+				if (b.typeID == 0)
+				{
+					gamePanel.dogFood += 50 * b.Level;
+				}
+				b.Countdown = b.CountdownMax;
+			}
+		}
 	}
 	
 	public void spawnEnemy()
