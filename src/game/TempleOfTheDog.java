@@ -28,4 +28,16 @@ public class TempleOfTheDog {
 		window.addKeyListener(panel);
 		window.pack();
 	}
+	
+	static double[] Normalize(double x, double y)
+	{
+		double[] vector = new double[2];
+		vector[0] = x;
+		vector[1] = y;
+		double magnitude = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
+		vector[0] = vector[0] / magnitude;
+		vector[1] = vector[1] / magnitude;
+		
+		return vector;
+	}
 }

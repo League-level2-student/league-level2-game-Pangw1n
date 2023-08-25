@@ -53,12 +53,16 @@ public class ObjectManager {
 				b.Countdown = b.CountdownMax;
 			}
 		}
+		for (Enemy e : enemies)
+		{
+			e.update();
+		}
 	}
 	
 	public void spawnEnemy()
 	{
 		int random = new Random().nextInt(TempleOfTheDog.WIDTH);
-		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 15, 15));
+		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 15, 15, goodDog));
 	}
 	
 	public void Build(int id, int x, int y, int width, int height)

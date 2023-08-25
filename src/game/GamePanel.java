@@ -49,9 +49,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     int waveNum;
     int spawnedEnemies;
     int totalEnemies;
-    int spawnCountdownMax;
+    int spawnCountdownMax = 1000;
     int spawnCountdown;
-    int waveDowntimeCountdownMax;
+    int waveDowntimeCountdownMax = 15000;
     int waveDowntimeCountdown;
     
 	public GamePanel()
@@ -81,11 +81,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	
     	waveStart = false;
     	waveNum = 0;
-        spawnedEnemies = 0;
-        totalEnemies = 0;
-    	spawnCountdownMax = 1000;
-    	spawnCountdown = 0;
-    	waveDowntimeCountdownMax = 15000;
 		waveDowntimeCountdown = waveDowntimeCountdownMax;
 	}
 	
@@ -183,11 +178,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			}
 			else if (objectManager.enemies.size() == 0)
 			{
-				waveStart = false;
 				waveDowntimeCountdown = waveDowntimeCountdownMax;
+				waveStart = false;
 			}
 		}
-		
 		else
 		{
 			waveDowntimeCountdown -= 1000/60;
@@ -325,7 +319,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 						dogFood -= GoldIncomeCostBase * (GoldIncomeLevel + 1);
 						GoldIncomeLevel ++;
 						
-						goldIncome = 50 * GoldIncomeLevel;
+						goldIncome = 20 * GoldIncomeLevel;
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_2)
