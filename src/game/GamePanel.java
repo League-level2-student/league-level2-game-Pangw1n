@@ -59,11 +59,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	titleFont = new Font("Arial", Font.PLAIN, 48);
     	subtitleFont = new Font("Arial", Font.PLAIN, 24);
     	
-    	player = new Player(300,300, 15, 15);
-		goodDog = new GoodDog(300, 150, 25, 25, 5);
-    	
-    	objectManager = new ObjectManager(goodDog, player, this);
+    	objectManager = new ObjectManager(this);
     	uiManager = new UIManager(0);
+    	
+    	player = new Player(300,300, 15, 15, objectManager);
+		goodDog = new GoodDog(300, 150, 25, 25, objectManager, 5);
     	
     	uiManager.MineCost = MineCost;
     	uiManager.TowerCost = TowerCost;
@@ -162,8 +162,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			goldCountdown = goldCountdownMax;
 		}
 		
-		
-		
 		if (waveStart)
 		{
 			if (spawnedEnemies < totalEnemies)
@@ -197,6 +195,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
 		objectManager.update();
 	}
+	
+	public void startGame()
+	{
+		
+	}
 
 	private void updateEndState() {
 		// TODO Auto-generated method stub
@@ -217,6 +220,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		        CurrentState = MENU;
 		    } else {
 		        CurrentState++;
+		        if (CurrentState == GAME)
+		        {
+		        	startGame();
+		        }
 		    }
 		    
 		    uiManager.CurrentState = uiManager.NONE;
@@ -282,7 +289,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 					//build dogfood mine
 					if (gold >= MineCost)
 					{
-						objectManager.Build(0, player.x, player.y, 30, 30);
+						objectManager.Build(0, (int)player.x, (int)player.y, 30, 30);
 						uiManager.CurrentState = uiManager.NONE;
 						gold -= MineCost;
 					}
@@ -292,7 +299,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 					//build tower
 					if (gold >= TowerCost)
 					{
-						objectManager.Build(1, player.x, player.y, 20, 20);
+						objectManager.Build(1, (int)player.x, (int)player.y, 20, 20);
 						uiManager.CurrentState = uiManager.NONE;
 						gold -= TowerCost;
 					}
@@ -302,7 +309,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 					//build trap
 					if (gold >= TrapCost)
 					{
-						objectManager.Build(2, player.x, player.y, 10, 10);
+						objectManager.Build(2, (int)player.x, (int)player.y, 10, 10);
 						uiManager.CurrentState = uiManager.NONE;
 						gold -= TrapCost;
 					}

@@ -5,9 +5,9 @@ import java.awt.Graphics;
 
 public class Enemy extends GameObject{
 	GameObject target;
-	int speed = 2;
-	public Enemy(int x, int y, int width, int height, GameObject target) {
-		super(x, y, width, height);
+	int speed = 1;
+	public Enemy(double x, double y, int width, int height, ObjectManager objectManager, GameObject target) {
+		super(x, y, width, height, objectManager);
 		
 		this.target = target;
 	}
@@ -15,17 +15,19 @@ public class Enemy extends GameObject{
 	public void draw(Graphics g)
 	{
 		g.setColor(Color.RED);
-        g.fillRect(x - width / 2, y - height / 2, width, height);
+        g.fillRect((int)x - width / 2, (int)y - height / 2, width, height);
 	}
 	
 	public void update()
 	{
+		super.update();
+		
 		double[] vector = new double[2];
 		vector[0] = target.x - x;
 		vector[1] = target.y - y;
 		
 		vector = TempleOfTheDog.Normalize(vector[0], vector[1]);
-		x = (int) (x + (vector[0] * speed));
-		y = (int) (y + (vector[1] * speed));
+		x = x + (vector[0] * speed);
+		y = y + (vector[1] * speed);
 	}
 }

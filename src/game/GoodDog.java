@@ -7,8 +7,8 @@ public class GoodDog extends GameObject{
 	public int health;
 	public int maxHealth;
 	
-	public GoodDog(int x, int y, int width, int height, int health) {
-		super(x, y, width, height);
+	public GoodDog(double x, double y, int width, int height, ObjectManager objectManager, int health) {
+		super(x, y, width, height, objectManager);
 		// TODO Auto-generated constructor stub
 		this.health = health;
 		this.maxHealth = health;
@@ -17,15 +17,27 @@ public class GoodDog extends GameObject{
 	public void draw(Graphics g)
 	{
 		g.setColor(Color.YELLOW);
-        g.fillRect(x - width / 2, y - height / 2, width, height);
+        g.fillRect((int)x - width / 2, (int)y - height / 2, width, height);
         
-        double healthPerc = health / maxHealth;
+        double a = health;
+        double b = maxHealth;
+        double healthPerc = a / b;
         g.setColor(Color.RED);
-        g.fillRect((int) (x - ((width * healthPerc)/ 2)), y - 30, (int) (width * healthPerc), 10);
+        g.fillRect((int) (x - ((width * healthPerc)/ 2)), (int)y - 30, (int) (width * healthPerc), 10);
 	}
 	
 	public void update()
 	{
+		super.update();
+		
+		for (int i = 0; i < objectManager.enemies.size(); i++)
+		{
+			if (this.collisionBox.intersects(objectManager.enemies.get(i).collisionBox) && objectManager.enemies.get(i).isActive == true)
+			{
+				health --;
+				objectManager.enemies.get(i).isActive = false;
+			}
+		}
 		if (health >= maxHealth)
 		{
 			health = maxHealth;

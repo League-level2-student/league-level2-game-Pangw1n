@@ -6,17 +6,15 @@ import java.util.Random;
 
 public class ObjectManager {
 	GamePanel gamePanel;
-	GoodDog goodDog;
-	Player player;
-	ArrayList<Building> buildings;
-	ArrayList<Enemy> enemies;
+	public GoodDog goodDog;
+	public Player player;
+	public ArrayList<Building> buildings;
+	public ArrayList<Enemy> enemies;
 	
 	int size;
 	
-	public ObjectManager(GoodDog goodDog, Player player, GamePanel gamePanel)
+	public ObjectManager(GamePanel gamePanel)
 	{
-		this.goodDog = goodDog;
-		this.player = player;
 		buildings = new ArrayList<Building>();
 		enemies = new ArrayList<Enemy>();
 		this.gamePanel = gamePanel;
@@ -39,7 +37,14 @@ public class ObjectManager {
 	
 	public void update()
 	{
+		purgeObjects();
+		
+		goodDog = gamePanel.goodDog;
+		player = gamePanel.player;
+	
 		player.update();
+		
+		goodDog.update();
 		
 		for (Building b : buildings)
 		{
@@ -59,15 +64,33 @@ public class ObjectManager {
 		}
 	}
 	
+	void purgeObjects()
+	{
+		for(int i = enemies.size() - 1; i >= 0; i--)
+		{
+			if (!enemies.get(i).isActive)
+			{
+				enemies.remove(i);
+			}
+		}
+		for(int i = buildings.size() - 1; i >= 0; i--)
+		{
+			if (!buildings.get(i).isActive)
+			{
+				buildings.remove(i);
+			}
+		}
+	}
+	
 	public void spawnEnemy()
 	{
 		int random = new Random().nextInt(TempleOfTheDog.WIDTH);
-		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 15, 15, goodDog));
+		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 15, 15, this, goodDog));
 	}
 	
 	public void Build(int id, int x, int y, int width, int height)
 	{
-		buildings.add(new Building(x, y, width, height, id));
+		buildings.add(new Building(x, y, width, height, this, id));
 	}
 	/*
 	 *0 - mine

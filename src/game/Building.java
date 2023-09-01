@@ -10,9 +10,9 @@ public class Building extends GameObject{
 	public double Countdown;
 	public double CountdownMax;
 	
-	public Building(int x, int y, int width, int height, int id)
+	public Building(double x, double y, int width, int height, ObjectManager objectManager, int id)
 	{
-		super(x, y, width, height);
+		super(x, y, width, height, objectManager);
 		typeID = id;
 		Level = 1;
 		
@@ -38,11 +38,13 @@ public class Building extends GameObject{
 			g.setColor(Color.BLACK);
 		}
 		
-        g.fillRect(x - width / 2, y - height / 2, width, height);
+        g.fillRect((int)x - width / 2, (int)y - height / 2, width, height);
 	}
 	
 	public void update()
 	{
+		super.update();
+		
 		Countdown -= 1000/60;
 	}
 }

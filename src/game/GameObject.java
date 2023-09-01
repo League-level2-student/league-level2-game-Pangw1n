@@ -1,17 +1,27 @@
 package game;
 
+import java.awt.Rectangle;
+
 public class GameObject {
-	int x;
-	int y;
+	double x;
+	double y;
 	int width;
 	int height;
 	
-	public GameObject(int x, int y, int width, int height)
+	public boolean isActive;
+	
+	ObjectManager objectManager;
+	public Rectangle collisionBox; 
+	
+	public GameObject(double x, double y, int width, int height, ObjectManager objectManager)
 	{
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.objectManager = objectManager;
+		collisionBox = new Rectangle();
+		isActive = true;
 	}
 	
 	public void move(int x, int y)
@@ -30,6 +40,6 @@ public class GameObject {
 	
 	public void update()
 	{
-		
+		collisionBox.setBounds((int)x - (width / 2), (int)y - (height / 2), width, height);
 	}
 }

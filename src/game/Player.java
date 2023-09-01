@@ -9,19 +9,21 @@ public class Player extends GameObject{
 	public boolean left;
 	public boolean right;
 	
-	public Player(int x, int y, int width, int height)
+	public Player(double x, double y, int width, int height, ObjectManager objectManager)
 	{
-		super(x, y, width, height);
+		super(x, y, width, height, objectManager);
 	}
 	
 	public void draw(Graphics g)
 	{
 		g.setColor(Color.BLUE);
-        g.fillRect(x - width / 2, y - height / 2, width, height);
+        g.fillRect((int)x - width / 2, (int)y - height / 2, width, height);
 	}
 	
 	public void update()
 	{
+		super.update();
+		
 		if (up)
 		{
 			move(0, -2);
