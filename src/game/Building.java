@@ -18,8 +18,13 @@ public class Building extends GameObject{
 		
 		if (id == 0)
 		{
-			Countdown = 5000;
-			CountdownMax = 5000;
+			Countdown = 2500;
+			CountdownMax = 2500;
+		}
+		else if (id == 1)
+		{
+			Countdown = 2500;
+			CountdownMax = 2500;
 		}
 	}
 	

@@ -54,8 +54,21 @@ public class ObjectManager {
 				if (b.typeID == 0)
 				{
 					gamePanel.dogFood += 50 * b.Level;
+					b.Countdown = b.CountdownMax;
 				}
-				b.Countdown = b.CountdownMax;
+				if (b.typeID == 1)
+				{
+					for (int i = 0; i < enemies.size(); i++)
+					{
+						Enemy e = enemies.get(i);
+						if (getDist(b, e) <= 100)
+						{
+							e.isActive = false;
+							b.Countdown = b.CountdownMax;
+							break;
+						}
+					}
+				}
 			}
 		}
 		for (Enemy e : enemies)
@@ -97,4 +110,11 @@ public class ObjectManager {
 	 *1 - tower
 	 *2 - trap
 	 */
+	
+	public double getDist(GameObject pos1, GameObject pos2)
+	{
+		double dist;
+		dist = Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
+		return dist;
+	}
 }

@@ -31,7 +31,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     int gold;
     int dogFood;
     
-    int MineCost = 100;
+    int MineCostBase = 100;
+    int MineCostLevel = 0;
     int TowerCost = 200;
     int TrapCost = 150;
     
@@ -49,9 +50,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     int waveNum;
     int spawnedEnemies;
     int totalEnemies;
-    int spawnCountdownMax = 1000;
+    int spawnCountdownMax = 2500;
     int spawnCountdown;
-    int waveDowntimeCountdownMax = 15000;
+    int waveDowntimeCountdownMax = 30000;
     int waveDowntimeCountdown;
     
 	public GamePanel()
@@ -64,8 +65,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	
     	player = new Player(300,300, 15, 15, objectManager);
 		goodDog = new GoodDog(300, 150, 25, 25, objectManager, 5);
-    	
-    	uiManager.MineCost = MineCost;
+
     	uiManager.TowerCost = TowerCost;
     	uiManager.TrapCost = TrapCost;
     	uiManager.HealCost = HealCost;
@@ -74,10 +74,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	frameDraw = new Timer(1000/60, this);
     	frameDraw.start();
     	
+    	waveDowntimeCountdownMax = 35000;
+    	
     	gold = 100;
     	dogFood = 0;
-    	goldCountdownMax = 5000;
+    	goldCountdownMax = 2500;
     	goldIncome = 0;
+        HealthLevel = 5;
+        GoldIncomeLevel = 0;
+        MineCostLevel = 0;
     	
     	waveStart = false;
     	waveNum = 0;
@@ -122,8 +127,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		
 		g.setColor(Color.BLACK);
 		g.setFont(subtitleFont);
-		g.drawString("GOLD: " + gold, 10, TempleOfTheDog.HEIGHT - 25);
-		g.drawString("DOGFOOD: " + dogFood, 10, TempleOfTheDog.HEIGHT - 50);
+		g.drawString("GOLD: " + gold, 10, TempleOfTheDog.HEIGHT - 50);
+		g.drawString("DOGFOOD: " + dogFood, 10, TempleOfTheDog.HEIGHT - 75);
+		g.drawString("NEXT WAVE IN: " + (int)(waveDowntimeCountdown / 1000), 10, TempleOfTheDog.HEIGHT - 25);
 	}
 
 	private void drawEndState(Graphics g) {
@@ -152,8 +158,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 
 	private void updateGameState() {
 		// TODO Auto-generated method stub
-    	uiManager.GoldIncomeCost = GoldIncomeCostBase * (GoldIncomeLevel + 1);
-    	uiManager.HealthCost = HealthCostBase * (HealthLevel + 1);
+    	uiManager.GoldIncomeCost = (int) (GoldIncomeCostBase * Math.pow(2, GoldIncomeLevel));
+    	uiManager.HealthCost = (int) (HealthCostBase * Math.pow(2, HealthLevel - 5));
+    	uiManager.MineCost = MineCostBase * (MineCostLevel + 1);
     	
 		goldCountdown -= 1000/60;
 		if (goldCountdown <= 0)
@@ -185,6 +192,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			waveDowntimeCountdown -= 1000/60;
 			if (waveDowntimeCountdown <= 0)
 			{
+				waveDowntimeCountdownMax = 15000;
 				waveStart = true;
 				waveNum ++;
 				spawnedEnemies = 0;
@@ -194,11 +202,41 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		}
 		
 		objectManager.update();
+		
+		if (goodDog.health <= 0)
+		{
+			CurrentState = END;
+		}
 	}
 	
 	public void startGame()
 	{
+		objectManager = new ObjectManager(this);
+    	uiManager = new UIManager(0);
+    	
+    	player = new Player(300,300, 15, 15, objectManager);
+		goodDog = new GoodDog(300, 150, 25, 25, objectManager, 5);
+    	
+    	uiManager.TowerCost = TowerCost;
+    	uiManager.TrapCost = TrapCost;
+    	uiManager.HealCost = HealCost;
+    	
 		
+    	frameDraw.restart();
+    	
+    	waveDowntimeCountdownMax = 30000;
+    	
+    	gold = 100;
+    	dogFood = 0;
+    	goldCountdownMax = 2500;
+    	goldIncome = 0;
+        HealthLevel = 5;
+        GoldIncomeLevel = 0;
+        MineCostLevel = 0;
+    	
+    	waveStart = false;
+    	waveNum = 0;
+		waveDowntimeCountdown = waveDowntimeCountdownMax;
 	}
 
 	private void updateEndState() {
@@ -220,11 +258,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		        CurrentState = MENU;
 		    } else {
 		        CurrentState++;
-		        if (CurrentState == GAME)
-		        {
-		        	startGame();
-		        }
 		    }
+	        if (CurrentState == GAME)
+	        {
+	        	startGame();
+	        }
 		    
 		    uiManager.CurrentState = uiManager.NONE;
 		}
@@ -251,6 +289,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			{
 				if (!waveStart)
 				{
+					waveDowntimeCountdownMax = 15000;
 					waveStart = true;
 					waveNum ++;
 					spawnedEnemies = 0;
@@ -287,11 +326,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				if (e.getKeyCode() == KeyEvent.VK_1)
 				{
 					//build dogfood mine
-					if (gold >= MineCost)
+					if (gold >= MineCostBase * (MineCostLevel + 1))
 					{
 						objectManager.Build(0, (int)player.x, (int)player.y, 30, 30);
 						uiManager.CurrentState = uiManager.NONE;
-						gold -= MineCost;
+						gold -= MineCostBase * (MineCostLevel + 1);
+						MineCostLevel ++;
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_2)
@@ -321,20 +361,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				if (e.getKeyCode() == KeyEvent.VK_1)
 				{
 					//upgrade gold income
-					if (dogFood >= GoldIncomeCostBase * (GoldIncomeLevel + 1))
+					if (dogFood >= GoldIncomeCostBase * Math.pow(2, GoldIncomeLevel))
 					{
-						dogFood -= GoldIncomeCostBase * (GoldIncomeLevel + 1);
+						dogFood -= GoldIncomeCostBase * Math.pow(2, GoldIncomeLevel);
 						GoldIncomeLevel ++;
 						
-						goldIncome = 20 * GoldIncomeLevel;
+						goldIncome = 25 * GoldIncomeLevel;
 					}
 				}
+				
 				if (e.getKeyCode() == KeyEvent.VK_2)
 				{
 					//upgrade health
-					if (dogFood >= HealthCostBase * (HealthLevel + 1))
+					if (dogFood >= HealthCostBase * Math.pow(2, HealthCostBase))
 					{
-						dogFood -= HealthCostBase * (HealthLevel + 1);
+						dogFood -= HealthCostBase * Math.pow(2, HealthCostBase);
 						HealthLevel ++;
 						
 						goodDog.maxHealth = HealthLevel;
