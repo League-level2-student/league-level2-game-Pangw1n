@@ -69,6 +69,19 @@ public class ObjectManager {
 						}
 					}
 				}
+				if (b.typeID == 2)
+				{
+					for (int i = 0; i < enemies.size(); i++)
+					{
+						Enemy e = enemies.get(i);
+						if (getDist(b, e) <= 20)
+						{
+							e.trapped = 6000;
+							b.Countdown = b.CountdownMax;
+							break;
+						}
+					}
+				}
 			}
 		}
 		for (Enemy e : enemies)

@@ -5,7 +5,10 @@ import java.awt.Graphics;
 
 public class Enemy extends GameObject{
 	GameObject target;
-	int speed = 1;
+	double speed = 1;
+	double baseSpeed;
+	int trapped = 0;
+	
 	public Enemy(double x, double y, int width, int height, ObjectManager objectManager, GameObject target) {
 		super(x, y, width, height, objectManager);
 		
@@ -21,6 +24,16 @@ public class Enemy extends GameObject{
 	public void update()
 	{
 		super.update();
+		
+		if (trapped > 0)
+		{
+			trapped -= 1000/60;
+			speed = 0.05;
+		}
+		else
+		{
+			speed = 1;
+		}
 		
 		double[] vector = new double[2];
 		vector[0] = target.x - x;
