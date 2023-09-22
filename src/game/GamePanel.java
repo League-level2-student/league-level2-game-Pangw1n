@@ -162,7 +162,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				spawnCountdown -= 1000/60;
 				if (spawnCountdown <= 0)
 				{
-					objectManager.spawnEnemy();
+					objectManager.spawnEnemy(waveNum);
 					spawnCountdown = spawnCountdownMax;
 					spawnedEnemies ++;
 				}
@@ -406,11 +406,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	
 	int getSpawnCooldown(int wave)
 	{
-		if (wave > 28)
+		if (wave > 12)
 		{
-			wave = 28;
+			wave = 12;
 		}
-		int y = (int) (1000 * (((-1/15) * wave) + 2));
+		int y = (int) ((-150 * (wave - 1)) + 2000);
 		return y;
 	}
 }

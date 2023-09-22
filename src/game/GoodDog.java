@@ -34,7 +34,7 @@ public class GoodDog extends GameObject{
 		{
 			if (this.collisionBox.intersects(objectManager.enemies.get(i).collisionBox) && objectManager.enemies.get(i).isActive == true)
 			{
-				health --;
+				health -= objectManager.enemies.get(i).health;
 				objectManager.enemies.get(i).isActive = false;
 			}
 		}

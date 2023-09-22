@@ -63,7 +63,7 @@ public class ObjectManager {
 						Enemy e = enemies.get(i);
 						if (getDist(b, e) <= 100)
 						{
-							e.isActive = false;
+							e.health -= 1;
 							b.Countdown = b.CountdownMax;
 							break;
 						}
@@ -76,7 +76,7 @@ public class ObjectManager {
 						Enemy e = enemies.get(i);
 						if (getDist(b, e) <= 20)
 						{
-							e.trapped = 6000;
+							e.trapped = 5000;
 							b.Countdown = b.CountdownMax;
 							break;
 						}
@@ -108,10 +108,11 @@ public class ObjectManager {
 		}
 	}
 	
-	public void spawnEnemy()
+	public void spawnEnemy(int wave)
 	{
+		int enemyHealth = (wave / 5) + 1;
 		int random = new Random().nextInt(TempleOfTheDog.WIDTH);
-		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 15, 15, this, goodDog));
+		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 15, 15, enemyHealth, this, goodDog));
 	}
 	
 	public void Build(int id, int x, int y, int width, int height)
