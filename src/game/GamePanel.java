@@ -202,7 +202,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     	uiManager = new UIManager(0);
     	
     	player = new Player(300,300, 15, 15, objectManager);
-		goodDog = new GoodDog(300, 150, 25, 25, objectManager, 5);
+		goodDog = new GoodDog(300, 150, 40, 40, objectManager, 5);
 
     	uiManager.TrapCost = TrapCost;
     	uiManager.HealCost = HealCost;
@@ -315,7 +315,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 					//build dogfood mine
 					if (gold >= MineCostBase * (MineCostLevel + 1))
 					{
-						objectManager.Build(0, (int)player.x, (int)player.y, 30, 30);
+						objectManager.Build(0, (int)player.x, (int)player.y, 50, 50);
 						uiManager.CurrentState = uiManager.NONE;
 						gold -= MineCostBase * (MineCostLevel + 1);
 						MineCostLevel ++;
