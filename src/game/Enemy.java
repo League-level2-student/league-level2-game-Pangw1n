@@ -2,6 +2,9 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 
 public class Enemy extends GameObject{
 	GameObject target;
@@ -9,18 +12,33 @@ public class Enemy extends GameObject{
 	double speed = 1;
 	double baseSpeed;
 	int trapped = 0;
+
+	public double Countdown;
+	public double CountdownMax;
+	
+	public BufferedImage image;
+	public boolean needImage = true;
+	public boolean gotImage = false;
 	
 	public Enemy(double x, double y, int width, int height, int health, ObjectManager objectManager, GameObject target) {
 		super(x, y, width, height, objectManager);
 		
 		this.health = health;
 		this.target = target;
+		
+		if (needImage) {
+		    loadImage ("enemy.png");
+		}
 	}
 	
 	public void draw(Graphics g)
 	{
-		g.setColor(Color.RED);
-        g.fillRect((int)x - width / 2, (int)y - height / 2, width, height);
+		if (gotImage) {
+        	g.drawImage(image, (int)x - width / 2, (int)y - height / 2, width, height, null);
+        } else {
+    		g.setColor(Color.RED);
+            g.fillRect((int)x - width / 2, (int)y - height / 2, width, height);
+        }
 	}
 	
 	public void update()
@@ -49,5 +67,17 @@ public class Enemy extends GameObject{
 		vector = TempleOfTheDog.Normalize(vector[0], vector[1]);
 		x = x + (vector[0] * speed);
 		y = y + (vector[1] * speed);
+	}
+	
+	void loadImage(String imageFile) {
+	    if (needImage) {
+	        try {
+	            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+		    gotImage = true;
+	        } catch (Exception e) {
+	            
+	        }
+	        needImage = false;
+	    }
 	}
 }

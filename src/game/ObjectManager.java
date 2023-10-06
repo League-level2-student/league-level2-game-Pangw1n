@@ -112,7 +112,7 @@ public class ObjectManager {
 	{
 		int enemyHealth = (wave / 5) + 1;
 		int random = new Random().nextInt(TempleOfTheDog.WIDTH);
-		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 15, 15, enemyHealth, this, goodDog));
+		enemies.add(new Enemy(random, TempleOfTheDog.HEIGHT, 30, 30, enemyHealth, this, goodDog));
 	}
 	
 	public void Build(int id, int x, int y, int width, int height)

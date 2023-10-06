@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     int GoldIncomeLevel = 0;
     int HealthCostBase = 50;
     int HealthLevel = 5;
-    int HealCost = 100;
+    int HealCost = 500;
     
 	float goldCountdownMax;
 	float goldCountdown;
@@ -178,7 +178,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			waveDowntimeCountdown -= 1000/60;
 			if (waveDowntimeCountdown <= 0)
 			{
-				waveDowntimeCountdownMax = 10000;
+				waveDowntimeCountdownMax = 20000;
 				waveStart = true;
 				waveNum ++;
 				spawnedEnemies = 0;
@@ -271,19 +271,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			{
 				player.right = true;
 			}
-			if (e.getKeyCode()==KeyEvent.VK_SPACE)
-			{
-				if (!waveStart)
-				{
-					waveDowntimeCountdownMax = 15000;
-					waveStart = true;
-					waveNum ++;
-					spawnedEnemies = 0;
-					totalEnemies = waveNum * 5;
-					spawnCountdownMax = getSpawnCooldown(waveNum);
-					spawnCountdown = 0;
-				}
-			}
 			if (e.getKeyCode()==KeyEvent.VK_E)
 			{
 				//double dist = Math.sqrt(Math.pow(goodDog.x - player.x, 2)   +   Math.pow(goodDog.y - player.y, 2));
@@ -326,7 +313,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 					//build tower
 					if (gold >= TowerCostBase * (TowerCostLevel + 1))
 					{
-						objectManager.Build(1, (int)player.x, (int)player.y, 20, 20);
+						objectManager.Build(1, (int)player.x, (int)player.y, 50, 50);
 						uiManager.CurrentState = uiManager.NONE;
 						gold -= TowerCostBase * (TowerCostLevel + 1);
 						TowerCostLevel ++;
@@ -337,7 +324,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 					//build trap
 					if (gold >= TrapCost)
 					{
-						objectManager.Build(2, (int)player.x, (int)player.y, 10, 10);
+						objectManager.Build(2, (int)player.x, (int)player.y, 25, 25);
 						uiManager.CurrentState = uiManager.NONE;
 						gold -= TrapCost;
 					}

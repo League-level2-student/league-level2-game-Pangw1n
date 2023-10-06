@@ -13,9 +13,11 @@ public class Building extends GameObject{
 	public double Countdown;
 	public double CountdownMax;
 	
-	public static BufferedImage image;
-	public static boolean needImage = true;
-	public static boolean gotImage = false;
+	public BufferedImage image;
+	public boolean needImage = true;
+	public boolean gotImage = false;
+	
+	boolean closed = false;
 	
 	public Building(double x, double y, int width, int height, ObjectManager objectManager, int id)
 	{
@@ -79,6 +81,28 @@ public class Building extends GameObject{
 		super.update();
 		
 		Countdown -= 1000/60;
+		
+		if (typeID == 2)
+		{
+			if (Countdown > 0)
+			{
+				if (closed == false)
+				{
+					needImage = true;
+					loadImage("closedtrap.png");
+					closed = true;
+				}
+			}
+			else
+			{
+				if (closed == true)
+				{
+					needImage = true;
+					loadImage("trap.png");
+					closed = false;
+				}
+			}
+		}
 	}
 	
 	void loadImage(String imageFile) {
