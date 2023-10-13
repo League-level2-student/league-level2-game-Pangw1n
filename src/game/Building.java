@@ -18,6 +18,8 @@ public class Building extends GameObject{
 	public boolean gotImage = false;
 	
 	boolean closed = false;
+	boolean isFiring = false;
+	Enemy target;
 	
 	public Building(double x, double y, int width, int height, ObjectManager objectManager, int id)
 	{
@@ -74,6 +76,12 @@ public class Building extends GameObject{
     		
             g.fillRect((int)x - width / 2, (int)y - height / 2, width, height);
         }
+		
+		if (isFiring && target != null)
+		{
+			g.setColor(Color.YELLOW);
+			g.drawLine((int)x, (int)y, (int)target.x, (int)target.y);
+		}
 	}
 	
 	public void update()

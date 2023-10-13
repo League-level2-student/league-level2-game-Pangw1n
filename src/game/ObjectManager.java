@@ -49,6 +49,8 @@ public class ObjectManager {
 		for (Building b : buildings)
 		{
 			b.update();
+			b.isFiring = false;
+			b.target = null;
 			if (b.Countdown <= 0)
 			{
 				if (b.typeID == 0)
@@ -65,6 +67,8 @@ public class ObjectManager {
 						{
 							e.health -= 1;
 							b.Countdown = b.CountdownMax;
+							b.target = e;
+							b.isFiring = true;
 							break;
 						}
 					}

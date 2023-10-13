@@ -121,6 +121,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, TempleOfTheDog.WIDTH, TempleOfTheDog.HEIGHT);
+
+		g.setColor(Color.RED);
+		g.setFont(titleFont);
+		g.drawString("GAME OVER", 150, 250);
+	
+		g.setFont(subtitleFont);
+		g.drawString("You made it to wave: " + waveNum, 175, 300);
+		g.drawString("Press ENTER to continue", 165, 550);
 	}
 
 	@Override
@@ -182,7 +190,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 				waveStart = true;
 				waveNum ++;
 				spawnedEnemies = 0;
-				totalEnemies = waveNum * 5;
+				totalEnemies = waveNum * 4;
 				spawnCountdownMax = getSpawnCooldown(waveNum);
 				spawnCountdown = 0;
 			}
@@ -193,6 +201,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		if (goodDog.health <= 0)
 		{
 			CurrentState = END;
+		    uiManager.CurrentState = uiManager.NONE;
 		}
 	}
 	
@@ -201,7 +210,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		objectManager = new ObjectManager(this);
     	uiManager = new UIManager(0);
     	
-    	player = new Player(300,300, 15, 15, objectManager);
+    	player = new Player(300,300, 35, 35, objectManager);
 		goodDog = new GoodDog(300, 150, 40, 40, objectManager, 5);
 
     	uiManager.TrapCost = TrapCost;
@@ -393,11 +402,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	
 	int getSpawnCooldown(int wave)
 	{
-		if (wave > 12)
+		if (wave > 11)
 		{
-			wave = 12;
+			wave = 11;
 		}
-		int y = (int) ((-150 * (wave - 1)) + 2000);
+		int y = (int) ((-140 * (wave - 1)) + 2000);
 		return y;
 	}
 }
